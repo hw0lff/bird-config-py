@@ -57,8 +57,8 @@ def make_defaults(router_id) -> BirdConfig:
     return bird_config
 
 
-router_id = IPv4Address("12.24.35.67")
-alt_v4 = IPv4Address("10.12.14.16")
+router_id = IPv4Address("192.0.2.123")
+alt_v4 = IPv4Address("192.0.2.23")
 router_ipv6 = IPv6Address("2001:db8::1234")
 default_config = make_defaults(router_id)
 
@@ -134,7 +134,7 @@ bfd_cool = Bfd(
     name="bfd_cool",
     from_template="bfd_tmpl",
     vrf="my_extra_vrf",
-    nb_ip=ip_address("1.2.3.4"),
+    nb_ip=ip_address("192.0.2.233"),
     nb_dev="eth0",
     nb_local_ip=router_id,
 )
@@ -148,7 +148,7 @@ direct_tmpl = Direct(
 )
 direct = Direct(
     name="my_other_vrf",
-    interface=[str(router_id), "10.128.1.2/32", "2001:db8::1/64"],
+    interface=[str(router_id), str(alt_v4), "2001:db8::1/64"],
     debug=debug,
     from_template="direct_tmpl",
     channel_v4=ChannelV4(table="my_other_vrf"),
@@ -158,7 +158,7 @@ direct = Direct(
 bgp_v4chan = ChannelV4(
     import_keep_filtered=Switch.On,
     import_filter="all",
-    export_filter=[f"{router_id}", f"{alt_v4}", ip_network("11.22.33.44/30")],
+    export_filter=[f"{router_id}", f"{alt_v4}", ip_network("192.0.2.20/30")],
 )
 bgp_v6chan = ChannelV6(
     import_keep_filtered=Switch.On, import_filter="all", export_filter=f"{router_ipv6}"
@@ -208,8 +208,8 @@ protocols: list[Protocol] = [
     krnl_my_other_vrf6,
     bgp_tmpl_v4,
     bgp_tmpl_v6,
-    mkBgp(router_id, 4242420001, "1.2.3.4", 4242420003),
-    mkBgp(router_id, 4242420001, "4.3.2.1", 4242420002),
+    mkBgp(router_id, 4242420001, "192.0.2.245", 4242420003),
+    mkBgp(router_id, 4242420001, "192.0.2.244", 4242420002),
 ]
 generated = BirdConfig(
     router_id=router_id,
