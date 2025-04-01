@@ -283,7 +283,7 @@ class Bfd(Protocol):
 
     def render_options(self) -> Iterable[str | None]:
         yield f"accept {self.accept};" if self.accept else None
-        nb = f"neighbor ip {self.nb_ip}" if self.nb_ip else None
+        nb = f"neighbor {self.nb_ip}" if self.nb_ip else None
         if nb:
             nb += f' dev "{self.nb_dev}"' if self.nb_dev else ""
             nb += f" local {self.nb_local_ip}" if self.nb_local_ip else ""
