@@ -85,6 +85,21 @@ class Render(ABC):
         raise NotImplementedError
 
 
+@dataclass(kw_only=True, frozen=True)
+class Newline(Render):
+
+    def render(self) -> Iterable[str]:
+        yield ""
+
+
+@dataclass(kw_only=True, frozen=True)
+class Comment(Render):
+    text: str = ""
+
+    def render(self) -> Iterable[str]:
+        yield f"# {self.text}" if len(self.text) else "#"
+
+
 @dataclass(frozen=True)
 class Include(Render):
     file: str
